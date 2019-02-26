@@ -9,7 +9,7 @@ SIZE = 900 #size (in pixels?)
 DIVISIONS = 60 #number of tiles
 PARTITION = SIZE / DIVISIONS #size of squares
 
-TICKTIME = 200 #simulation speed
+TICKTIME = 200 #frametime in ms
 
 #classes
 class Point:
@@ -144,16 +144,12 @@ def remove_snake():
     BOARD.remove(SNAKE.remove())
 
 def reset_game():
-    """reset all objects"""
+    """Reset or start the game"""
     #restart each object
     BOARD.__init__()
     SNAKE.__init__()
 
-    #restart food item
-    global FOOD
-    FOOD = Point(0, 0)
-
-    #add new snake
+    #put new snake
     row = int(DIVISIONS / 2)
     for column in range(row - 1, row + 2):
         add_snake(Point(column, row))
@@ -175,6 +171,9 @@ def loop():
         add_food()
         add_snake(next_pos)
         SNAKE.last_direction = SNAKE.direction
+
+        global TICKTIME
+        TICKTIME = int(TICKTIME * 0.95)
 
     elif next_item == "black":
         reset_game()
